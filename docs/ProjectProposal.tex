@@ -1,0 +1,106 @@
+\documentclass{article}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[top=2cm, bottom=4.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{fullpage}
+\usepackage{lastpage}
+\usepackage{listings}
+\usepackage{color}
+\usepackage[nottoc]{tocbibind}
+
+% Debug Packages
+\usepackage{blindtext}
+
+% Code Design
+\lstset{
+   breaklines=true,
+   basicstyle=\ttfamily,
+   language=SQL,
+   numbers=left,
+   numberstyle=\tiny,
+   commentstyle=\color{gray},
+   keywordstyle=\color{blue},
+   identifierstyle=\color{black}}
+
+% Title
+\title{CanvasPath}
+\author{Eric Roeum}
+
+% Document
+\begin{document}
+
+  % Title
+  \maketitle
+  \pagenumbering{gobble}
+  \newpage
+
+  % Table of Contents
+  \tableofcontents
+  \addcontentsline{toc}{section}{References}
+  \newpage
+
+  % Table of Figures
+  \listoffigures
+  \newpage
+
+  \pagenumbering{arabic}
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Introduction:
+
+  \section{Introduction}\label{sec:Introduction}
+    At Lion State University, staff and students need a system in order to maintain information about classes, students, grades, roles, and other aspects of school.  Because of this, a database is required to hold all of this information in a usable format that student and teachers can access both easily and securely.  This system will be called CanvasPath.  The CanvasPath application will primarily be composed of four components:
+    \begin{itemize}
+        \item A login system
+        \item Viewing courses
+        \item Scheduling courses
+        \item Deriving student infromation
+    \end{itemize}
+    As such, this system will be web browser based with a client-server implemented model.  The client system will only be used for input/output, while the server will handle all database operations.
+    \newline\newline
+    This system will be an updated version of the current applications: Canvas and LionPath.  By integrating both systems into one, users will have more ease of use and will be able to do operations in one system instead of having to switch between both.
+
+  \medskip
+
+  \subsection{Objective}\label{sec:Introduction:Objective}
+    The purpose of the document is to propose an implmentation for the CanvasPath application along with potential features.  In addition to doing so, this document contains how the internal database should be organized along with potential designs.  As a result, this document is divided primarily into five components:
+    \begin{itemize}
+      \item Requirements analysis
+      \item Web Application Design
+      \item Conceptual database design
+      \item Technological survey
+      \item Logical database design
+      \item Schema Refinements
+    \end{itemize}
+
+  \medskip
+
+  \subsection{Stylization}\label{sec:Introduction:Stylization}
+    Within this document, certain styles and notations will be used for readability.  More specifically, italicization is resevered for only variable names (i.e. \textit{Height}).  Any other forms of text can be used in any other context.  For entity-relationship (ER) diagrams, the textbook notation is used (See reference \cite{textbook}).
+
+  \newpage
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Appendix
+
+  \section{Appendix}\label{sec:Appendix}
+
+  \medskip
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % References
+
+  \begin{thebibliography}{1}
+
+    \bibitem{textbook}
+    Ramakrishnan; Gehrke.
+    \textit{Database Management Systems- Third Edition}.
+    McGraw-Hill Higher Edication, 2003.
+
+  \end{thebibliography}
+
+
+\end{document}
