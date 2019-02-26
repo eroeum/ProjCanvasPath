@@ -84,6 +84,96 @@
   \newpage
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Requirements Analysis
+
+  \section{Requirements Analysis}\label{sec:Requirements}
+    This section goes over the requirements proposed by LionState University for the CanvasPath project.
+
+  \subsection{Overview}\label{sec:Requrements:Overview}
+    Because CanvasPath is intended to replace current course managements systems at LionState University, a lot of the requirements come from updating the features of the current system, Canvas and LionPath.  As such, CanvasPath requires a login system for the user to be identified, a system to control course scheduling/viewing, and accessing personal info primarily.  As a result, each system must be implemented in order to meet the requirements of the current application.  Of course, it is important to include new features as well.  However, current features need to be implemented before new features should be developed.
+
+  \subsection{System Overview}\label{sec:Requirements:System}
+    In terms of easibility, Canvas has the advantage over Lionpath, so the overall system should mimic the Canvas system more so.  As a result, the canvas design flow will be followed.  When the user first opens the application, for example, they are presented with a login screen such that they can identify who they are without allowing others to access the same information.  After logging in, the system should detect if the user is a student, faculty member, or administrator.
+    \newline\newline
+    Each user will be presented with three levels of usability:
+    \begin{itemize}
+      \item A student can view and sign-up for classes
+      \item A faculty member can view, sign-up, and create classes/groups
+      \item An administrator can do everything a student and faculty member can do, but also create new users.
+    \end{itemize}
+    Another aspect that canvas has is viewing individual course details.  Within each course, students and faculty members should be able to view grades, announcments, assignmennts, files, grades, associated people, and view syllabi.
+    \newline\newline
+    Within LionPath, features unique to LionPath should also be added to this Canvas-like system.  For example, scheduling course, viewing available courses, prerequisite courses, academic records, tuition, and research activities.  As a result, after logging into the system, a user should be given a menu to choose the correct action.
+
+  \subsection{Users}\label{sec:Requirements:Users}
+    There are two primary users: a student and a faculty member, with the special user called the administrator.  Each category is not necessarily disjoint from each other though.  For example,  a student may also be a faculty member.  Both the student and faculty member should have personal information stored as well as courses taken/taught, grades, etc.  The primary difference between the two is that a student should take a class whereas a faculty member should support a class.
+    \newline\newline
+    A student is any person who is currently taking or has taken a class.  Because of this, each student requires past courses, current courses, future courses, grades, assignments, and files to be stored in order to meet this requirement academically.  On more personal levels, it is also important to store more personal information.  For example, a student's primary address, personal email, school email ID, passwords, emergency contacts are essential to keep.  Further relations need to be stored as well.  For example, the instructors, courses, sections, departments, etc. that the student is related to should alos be stored.
+    \newline\newline
+    On the other hand, any person who is currently supporting or has supported a class is a factuly member.  This includes, teachers, professors, researchers, teaching assistants, learning assistants, and more.  Faculty members are very similar in what data is required on them: past courses, current courses, future courses, files, research, budget, etc.  More information is then required for human resourse (HR) purposes: pay-rate, years worked, department.
+    \newline\newline
+    The final administrator user is particularly useful for implementing new groups and users.  These users will have full control to the system and are able to both access and manipulate any data.
+
+    \subsubsection{Student}\label{sec:Requirements:Users:Student}
+      A student is any user who is enrolled at Lion State University.  It is important to maintain information about enrolled students so both students and faculty members can enroll into courses appropriately.  Information stored about students should include:
+      \begin{itemize}
+        \item Name: Student Name
+        \item ID: Student ID
+        \item Age: Student Age
+        \item Gender: Male/Female/Other
+        \item Email Address: Personal email address of student
+        \item Home Address: Permananent/Mailing address of student
+        \item Login Password: Password to log into system (Encoded into SHA256)
+        \item Majors/Minors: Completed/Intended graudation path of student
+      \end{itemize}
+
+    \subsubsection{Faculty Member}\label{sec:Requirements:Users:Faculty}
+      A faculty member is any user who supports any course at Lion State University.  Note that courses may not necessarily be purely academic and supporting a course does not necessarily mean teaching a class.  Still, it is importannt to maintain information about active faculty member so that they can properly support their respective course.  Information stored about faculty members include the following:
+      \begin{itemize}
+        \item Name: Faculty Name
+        \item ID: Faculty ID (Note that this is synonomous for Student ID as they come from the same pool of values)
+        \item Age: Faculty Age
+        \item Gender: Male/Female/Other
+        \item Email Address: Personal email address of faculty member
+        \item Home Address: Permananent/Mailing address of faculty member
+        \item Login Password: Password to log into system (Also encoded into SHA256)
+        \item Department: Department that faculty corresponds
+        \item Pay-grade: Level of pay faculty member gets paid
+        \item Semesters Working: Amount of years worked by faculty member
+        \item Office Address: Working office of faculty member
+        \item Title: Title of faculty member
+      \end{itemize}
+
+
+
+  \subsection{Groups}\label{sec:Requirements:Groups}
+    In order to avoid duplication of data, groups are made to rerpresent areas where a group of individuals of users share a certain aspsect.  These groups are primarily categorized by the following:
+    \begin{enumerate}
+      \item Courses: a class which a student may take and a faculty member may teach/support.  Courses can only be offered by one department (though duplicate courses can have different departments i.e. CS/DS 200).  Within each course, the course name, course ID, department, sections, primary teacher, support staff, and students all need to be stored.
+      \item Deparments: The certain degree program that classes identify with.  For example computer science, psychology, and engineering are considered as departments.  Note that duplicate departments cannot exist.  Within the department group, information regarding faculty members are mentioned as well as majors, minors, names of programs, etc.  The departments group individual courses by specific major/minor programs.
+      \item Section: a subset of a course.  Because courses can be very large, it is important to maintain smaller groups in order to provide multiple sections of the same class.  Further, sections allow different course material.  For example, a capstone section can now be implemented in order to have different assignments.
+    \end{enumerate}
+
+  \subsubsection{Courses}\label{sec:Requirements:Groups:Courses}
+    A course represents, not only a class that a student can take, but also an activity that some students or facilty members may participate in.  For example, a research activity can be considered a course, though it may not necessarily be for credit or have the ability enroll students.  However, using the research activity example, a single course will be implemented to represent all research activities on campus while each individual research activity is distibuted bia sections within the course information.
+
+  \subsubsection{Departments}\label{sec:Requirements:Groups:Departments}
+    A department is a certain group which courses can associatite with, more specifically by majors.  For example, computer science, psychology, math, physics are all appropriate departments, though none of them have to necessarily be degree program offered by the university.  Further, administration may be able to control department budgets and activities of courses thorugh a single entity instead of controling each individaul activity.
+
+  \subsubsection{Section}\label{sec:Requirements:Groups:Section}
+    A section is a subset of a single course that a student can enroll.  Usually, sections of the same course vary in time, but not necessarily.  Further a section specifies the type of the course.  For example sections can represent the following:
+    \begin{itemize}
+      \item Regular: A class where students physically attend the course
+      \item Online: A class where student access course information electronically
+      \item Hybrid: A mixture of both regular and online classes
+      \item Research: A research opportunity that students/faculty members can participate
+      \item Internship: An opportunity that students can take off school during a semester term.
+      \item Coop: An opportunity that students can take off school during multiple semester terms.
+    \end{itemize}
+
+    \newpage
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   % Appendix
 
   \section{Appendix}\label{sec:Appendix}
