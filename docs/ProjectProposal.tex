@@ -9,7 +9,11 @@
 \usepackage{lastpage}
 \usepackage{listings}
 \usepackage{color}
-\usepackage[nottoc]{tocbibind}
+\usepackage{tikz-er2}
+\usepackage{float}
+
+% Path to images
+\graphicspath{ {./images/} }
 
 % Debug Packages
 \usepackage{blindtext}
@@ -24,6 +28,9 @@
    commentstyle=\color{gray},
    keywordstyle=\color{blue},
    identifierstyle=\color{black}}
+
+% ER Model Design
+\usetikzlibrary{positioning}
 
 % Title
 \title{CanvasPath}
@@ -144,8 +151,6 @@
         \item Title: Title of faculty member
       \end{itemize}
 
-
-
   \subsection{Groups}\label{sec:Requirements:Groups}
     In order to avoid duplication of data, groups are made to rerpresent areas where a group of individuals of users share a certain aspsect.  These groups are primarily categorized by the following:
     \begin{enumerate}
@@ -170,6 +175,128 @@
       \item Internship: An opportunity that students can take off school during a semester term.
       \item Coop: An opportunity that students can take off school during multiple semester terms.
     \end{itemize}
+
+    \newpage
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Web Application Design
+
+  \section{Web Application Design}\label{sec:Web}
+    This section will cover the inteded design and implmentation for CanvasPath.  The web application will primarily be controlled via a server-client communication protocal, where all client-side operations will occur through a web browser.
+
+  \subsection{Webpage Overview}\label{sec:Web:Overview}
+    As stated previously all communcations will follow the server-client communication protocal.  The client-side of this application will be the highlight of this section.  Within this aspect, there are four primary windows:
+    \begin{itemize}
+      \item Login Screen
+      \item Homepage
+      \item Personal Information
+      \item Current Schedule
+      \item Class Scheduler
+      \item Finances
+    \end{itemize}
+    The following diagram shows how each window should interfaces with one another.  The first screen any user is presented with is the login screen.  Afterwards, any window that the current window is pointing towards can be accessed.
+
+    \begin{figure}[h]
+    \begin{center}
+    \scalebox{0.87}{
+    \begin{tikzpicture}[node distance=1.5cm, every edge/.style={link}]
+
+      \node[entity] (logn) {Login};
+      \node[entity] (home) [below=of logn] {Homepage};
+      \node[entity] (info) [left=of home] {Personal Info};
+      \node[entity] (schd) [below left=of home] {Current Courses};
+      \node[entity] (schl) [below right=of home] {Class Scheduler};
+      \node[entity] (fins) [right=of home] {Finances};
+
+      \draw[<->] (logn) edge node {} (home);
+      \draw[<->] (info) edge node {} (home);
+      \draw[<->] (schd) edge node {} (home);
+      \draw[<->] (schl) edge node {} (home);
+      \draw[<->] (fins) edge node {} (home);
+
+      \draw[->] (info) edge node {} (logn);
+      \draw[->] (schd) edge node {} (logn);
+      \draw[->] (schl) edge node {} (logn);
+      \draw[->] (fins) edge node {} (logn);
+
+    \end{tikzpicture}
+    }
+    \caption{Flow Diagram of Webpage Screens}\label{fig:WebFlow}
+    \end{center}
+    \end{figure}
+
+    \subsection{Login Screen}\label{sec:Web:Login}
+      The login screen's only purpose is to allow users to identify themselves securily.  In order to avoid any confusion, this procedure is kept simple with two textboxes: the user id and password; and a button: submit request.  Though currently, the Canvas and LionPath applications have a "Forgot Password" button, this feature will not be added in order to reduce complications and stay in the scope of the assignment.
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=4 in]{Design/LoginScreen}
+        \caption{Login Webpage}
+        \label{fig:login}
+      \end{figure}
+
+    \subsection{Homepage}\label{sec:Web:Home}
+      The homepage is very similar to Canvas's Dashborad page.  This page will take the most recent activity for the user and display it on the screen such that it is very easy to view and use the most likely activity.  Further the homeage acts as a hub for the rest of the webpages; all webpages can be access from the home webpage.
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=4 in]{Design/Homepage}
+        \caption{Homepage}
+        \label{fig:home}
+      \end{figure}
+
+    \subsection{Personal Infromation}\label{sec:Web:Personal}
+      The personal information screen allows the user to both access and manipulate any personal data stored by the system.  For example, if the user wishes to change his/her password, address, phone number, and others, he/she can do so in the personal information webpage.  This page is also very simple: a table shows all the currently stored data.  After each row, a button is present that allows the user to change the respective field by enabling the textbox.  While changing information, two new buttons appear in order to either "confirm" or "cancel" the change.  On the top of the screen, there exists tabs in order to scroll through possible categories such as academics, finances, contact infromation, etc.  This webpage exists primarily as an archival page for older information.
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=5 in]{Design/PersonalInfo}
+        \caption{Personal Information Webpage}
+        \label{fig:personalinfo}
+      \end{figure}
+
+    \subsection{Current Schedule}\label{sec:Web:CSchedule}
+      The current schedule provides students and faculty members access to current classes.  In this webpages, each student can view all of his/her courses, enter the specific course, and do anything relevant to that class.  This is most similar to Canvas's "Courses" tab.  Students and faculty members can access enrolled courses and see upcoming assignments, view any announcements, check grades, view files, etc.  Faculy members have special priveledes, however.  They can, for example, create announcements, upload files, and change grades.
+      \newline\newline
+      This page has a very simple design.  On the left-hand-side, there exists tabs to get to other screen.  In the center, a table displays all currently enrolled courses.  If a user selects a course in that table, the table disappears and that course's specific course page becomes active.
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=4 in]{Design/ClassSchedule/Table}
+        \caption{Table of currently enrolled courses}
+        \label{fig:CScheduleTable}
+      \end{figure}
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=4 in]{Design/ClassSchedule/CoursePage}
+        \caption{Example of a course page}
+        \label{fig:CSchedulePage}
+      \end{figure}
+
+    \subsection{Class Scheduler}\label{sec:Web:CScheduler}
+      The class scheduler allows students to schedule for courses for future semesters as well as faculty members to create courses.  Any course that a student schedules must be approved by the instructor of the course.  Any course that a faculty member creates must be approved by an administrator.  This most closely follows LionPath's Scheduler Builder tool, combined with the "Search Classes" screen.  Following a similar design, the CanvasPath application will follow a folder system: classes are organized per department per semester.  The page is very similar to the current schedule page mentioned in section \ref{sec:Web:CSchedule}.
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=4 in]{Design/CourseScheduler}
+        \caption{Table of currently enrolled courses}
+        \label{fig:CSchedule-Tasks}
+      \end{figure}
+
+      Within this class scheduler, a search bar is at the top of the page in order to search for the class desired.  Any results matching that string will be displayed in the search results window, where users can get more information on each specific course.  If the user is interested, he/she can add that to his/her current schedule, displayed at the bottom.  Any course added, is then requested to the instructor of the course for approval.  At the start of the semester, any student who was denied entry to the course or is still waiting is removed from this menu.  Note that any courses not added to the current schedule are not saved, so the user must research for the course.  A faculty member has the additional feature to add to the course lists.  Approval is required by an administrator however.
+
+    \subsection{Finances}
+      The finance web page displays anything related to money.  A student can view estimated tuitions, housing costs, and meal plans.  A faculty member has the ability to view his/her paygrade, any bills, past payments, any forms, and payment type.  Most of the fields are immutable by anyone except an administrator.  The webpage is very simple, with a single table to view the previously stated fields.
+      \newline\newline
+      For the purposes of this project, no information will be mutable and no payments are actually generated.  Doing so would add unnecessary complications and require actual finances.  Further, the finance page will not be completely accurate; due to the scope of this project, no pricing details will be implemented and the estimates will be completely fictional.
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=4 in]{Design/Finances}
+        \caption{Finances Webpage}
+        \label{fig:Finances}
+      \end{figure}
 
     \newpage
 
