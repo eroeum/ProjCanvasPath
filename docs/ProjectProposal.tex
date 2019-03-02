@@ -301,6 +301,377 @@
     \newpage
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Conceptual Database Design
+
+  \section{Conceptual Database Design}\label{sec:Concept}
+    This section goes over the database design of the CanvasPath project using primarily ER diagrams.  The following figures desribes the primary overall structure of the database.  Any attributes have been ommitted for the purposes of avoiding confusion.  The main entities are a student, a faculty member, and a section.  Note that a section is primary because it is simply a derivation from a course from a department.
+    \newline
+    \newline
+    There are, however, 15 entitites in this current section:
+    \begin{itemize}
+      \item \textit{Student}: Any student enrolled in LionState University
+      \item \textit{PartTime\_Student}: Any student taking fewer than 12 credits
+      \item \textit{Regular\_Student}: Any student taking 12 or more credits
+      \item \textit{Honor\_Student}: Any student enrolled in the honors program
+      \item \textit{Inactive\_Student}: Any future or past students
+      \item \textit{Graduate\_Student}: Any student in a graduate program
+      \item \textit{Section}: A section for any course
+      \item \textit{Course}: Any class offered
+      \item \textit{Department}: A specific department at LionState university
+      \item \textit{Faculty}: Any supporting faculty member
+      \item \textit{Instructor}: Any faculty member who teaches a course
+      \item \textit{Assistant}: Any teaching assistant, learning assistant, grader for a course
+      \item \textit{Researcher}: Any faculty member involved in research
+      \item \textit{Research\_Assistant}: Any research assistant not affiliated with the school
+      \item \textit{FacultyMember\_Other}: Any other faculty member
+    \end{itemize}
+    The following ER diagram represents the relations of each of the aforementioned entities.  In following sections, each relationship is described in detail.
+
+    \begin{figure}[H]
+    \begin{center}
+    \scalebox{0.67}{
+    \begin{tikzpicture}[node distance=2cm, every edge/.style={link}]
+
+      \node[relationship] (tkcs) {Takes\_Course};
+
+      \node[entity] (stdt) [below left=3 cm of tkcs] {Student};
+      \node[isa]    (isa1) [below=2 cm of stdt] {ISA};
+      \node[entity] (pstd) [below left=of isa1] {PartTime\_Student};
+      \node[entity] (rstd) [below=of isa1] {Regular\_Student};
+      \node[entity] (hstd) [below right=of isa1] {Honor\_Student};
+      \node[entity] (istd) [left=of isa1] {Inactive\_Student};
+      \node[entity] (gstd) [right=of isa1] {Graduate\_Student};
+
+      \node[entity] (sect) [right=3 cm of tkcs] {Section};
+      \node[relationship] (bgto) [below=2 cm of sect] {Belongs\_To};
+      \node[entity] (crse) [below=of bgto] {Course};
+      \node[relationship] (ptof) [below=of crse] {Part\_Of};
+      \node[entity] (dept) [below=of ptof] {Department};
+
+      \node[relationship] (asts) [above right=of sect] {Assists};
+      \node[relationship] (wrfr) [above right=of ptof] {Works\_For};
+
+      \node[entity] (fcty) [right=3cm of sect] {Faculty};
+      \node[isa]    (isa2) [below=2 cm of fcty] {ISA};
+      \node[entity] (inst) [below left=of isa2] {Instructor};
+      \node[entity] (asst) [below=of isa2] {Assistant};
+      \node[entity] (fmot) [below right=of isa2] {FacultyMember\_Other};
+      \node[entity] (rshr) [right=of isa2] {Researcher};
+
+      \node[relationship] (help) [above=of rshr] {Helps};
+      \node[weak entity] (rrat) [above=of help] {Research\_Assistant};
+
+      \draw[-] (stdt) edge node {} (isa1);
+      \draw[-] (pstd) edge node {} (isa1);
+      \draw[-] (rstd) edge node {} (isa1);
+      \draw[-] (hstd) edge node {} (isa1);
+      \draw[-] (istd) edge node {} (isa1);
+      \draw[-] (gstd) edge node {} (isa1);
+
+      \draw[-] (stdt) edge node {} (tkcs);
+      \draw[-] (sect) edge node {} (tkcs);
+
+      \draw[->] (sect) edge node {} (bgto);
+      \draw[-] (crse) edge node {} (bgto);
+      \draw[->] (crse) edge node {} (ptof);
+      \draw[-] (dept) edge node {} (ptof);
+
+      \draw[-] (sect) edge node {} (asts);
+      \draw[-] (fcty) edge node {} (asts);
+
+      \draw[-] (fcty) edge node {} (isa2);
+      \draw[-] (inst) edge node {} (isa2);
+      \draw[-] (asst) edge node {} (isa2);
+      \draw[-] (fmot) edge node {} (isa2);
+      \draw[-] (rshr) edge node {} (isa2);
+
+      \draw[-] (rshr) edge node {} (help);
+      \draw[-] (rrat) edge node {} (help);
+
+      \draw[->] (fcty) edge node {} (wrfr);
+      \draw[-] (dept) edge node {} (wrfr);
+
+    \end{tikzpicture}
+    }
+    \caption{ER Diagram Overview}\label{fig:Overview ER Diagram}
+    \end{center}
+    \end{figure}
+
+  \subsection{Student}\label{sec:Concept:Student}
+    A student is any user who is enrolled in LionState university.  To break down a student further, we abstract the idea of a student into 5 categories:
+    \begin{itemize}
+      \item \textit{Inactive\_Student}: Any student who is inactive such as a past student or a student taking a break from school.
+      \item \textit{PartTime\_Student}: Any student taking fewer than 12 credits.
+      \item \textit{Regular\_Student}: Any regular student (Default)
+      \item \textit{Honor\_Student}: Any student enrolled in the honor program
+      \item \textit{Graduate\_Student}: Any student enrolled as in the graduate school.
+    \end{itemize}
+
+    The attributes of any student is listed below:
+    \begin{itemize}
+      \item Name: Student name
+      \item ID: Student id
+      \item Password: Password to log into system
+      \item Age: age in years of student
+      \item Email: Personal email address of student
+      \item Gender: Male/Female/Other
+      \item Street: Street Address of student
+      \item City: City of student's permanenet address
+      \item State: State of student's permanent address
+      \item Major: Major of student
+    \end{itemize}
+
+    \begin{figure}[H]
+      \begin{center}
+      \scalebox{0.67}{
+      \begin{tikzpicture}[node distance=2cm, every edge/.style={link}]
+          \node[entity] (stds) {Students};
+          \node[attribute] (s5) [above=of stds] {Email};
+          \node[attribute] (s4) [left=0.5 cm of s5] {Age};
+          \node[attribute] (s3) [left=0.5 cm of s4] {Password};
+          \node[attribute] (s2) [left=0.5 cm of s3] {\key{ID}};
+          \node[attribute] (s1) [left=0.5 cm of s2] {Name};
+          \node[attribute] (s6) [right=0.5 cm of s5] {Street};
+          \node[attribute] (s7) [right=0.5 cm of s6] {City};
+          \node[attribute] (s8) [right=0.5 cm of s7] {State};
+          \node[attribute] (s9) [right=0.5 cm of s8] {Major};
+
+          \node[isa] (isa) [below=of stds] {ISA};
+          \node[entity] (istd) [left=of isa] {Inactive\_Student};
+          \node[entity] (pstd) [below left=of isa] {PartTime\_Student};
+          \node[entity] (rstd) [below=of isa] {Regular\_Student};
+          \node[entity] (hstd) [below right=of isa] {Honor\_Student};
+          \node[entity] (gstd) [right=of isa] {Graduate\_Student};
+
+          \node[attribute] (idat) [left=of istd] {Inactivity\_Date};
+
+          \node[attribute] (inst) [below left=of pstd] {Institution};
+          \node[attribute] (type) [below=of pstd] {Type\_of\_Student};
+
+          \node[attribute] (hcrt) [below=of hstd] {Num\_Honor\_Credits};
+          \node[attribute] (rsch) [below right=of hstd] {Research};
+
+          \node[attribute] (grsc) [right=of gstd] {Research};
+
+          \draw[-] (s1) edge node {} (stds);
+          \draw[-] (s2) edge node {} (stds);
+          \draw[-] (s3) edge node {} (stds);
+          \draw[-] (s4) edge node {} (stds);
+          \draw[-] (s5) edge node {} (stds);
+          \draw[-] (s6) edge node {} (stds);
+          \draw[-] (s7) edge node {} (stds);
+          \draw[-] (s8) edge node {} (stds);
+          \draw[-] (s9) edge node {} (stds);
+
+          \draw[-] (idat) edge node {} (istd);
+          \draw[-] (inst) edge node {} (pstd);
+          \draw[-] (type) edge node {} (pstd);
+          \draw[-] (hcrt) edge node {} (hstd);
+          \draw[-] (rsch) edge node {} (hstd);
+          \draw[-] (grsc) edge node {} (gstd);
+
+          \draw[-] (istd) edge node {} (isa);
+          \draw[-] (pstd) edge node {} (isa);
+          \draw[-] (rstd) edge node {} (isa);
+          \draw[-] (hstd) edge node {} (isa);
+          \draw[-] (gstd) edge node {} (isa);
+
+          \draw[-] (stds) edge node {} (isa);
+
+      \end{tikzpicture}
+      }
+      \caption{ER Diagram of student}\label{fig:Overview ER Diagram}
+    \end{center}
+    \end{figure}
+
+  \subsubsection{Inactive Student}\label{sec:Concept:Student:Inactive}
+    An inactive student represents any student who is enrolled at LionState University, but is currently taking no credits.  This can include future students, past students, or students who simply are taking a break from school.  The only difference that a an inactive student has over a regular student is the inactivity period.  If the inactivity period remains too long, it is an indicator that the studne tcan be deleted from the database.  The idea to abstract this student from a regular student comes from this exact reason: it is important to maintain this type of information easily.  The only extended attribute is the inactivity date.  The inactivity date will indicate an appropriate measurement for determining an appropriate date for termination.
+
+    \begin{itemize}
+      \item \textit{Inactivity\_Date}: The date of inactfivity of the student.
+    \end{itemize}
+
+  \subsubsection{Part-Time Student}\label{sec:Concept:Student:PartTime}
+    A part-time student is any student taking fewer than 12 credits during as semester.  This ia an important distinction since it helps decide the student's tuition, available resources, and other aspects decided by the school's administration.  Therefore, in order to reduce query time and computation time, a part-time student is derived from the student entity.  A part-time student is assumed to be one of three options: (1) a student in a dual-enrollment program, (2) a student taking fewer credits, (3) a coop student.  As a result, the type of student as well as the institution of the student, if available is stored.
+
+    \begin{itemize}
+      \item \textit{Institution}: The intstitution of the student if in a dual-enrollment program (\textit{NULL} if option 2 and \textit{COOP} if option 3).
+      \item \textit{Type\_Of\_Student}: Type of student (1,2, or 3).
+    \end{itemize}
+
+  \subsubsection{Regular Student}\label{sec:Concept:Student:Regular}
+    A regular student is the dfault student.  Basically, any student who does not fall into one of the other categories is considered to be a regular student.  For example, if a student takes more than 12 credits, is not enrolled in the honor school, and is an undergraduate student is a regular student if he/she is actively taking courses.  As a result, no new attributes are needed.
+
+  \subsubsection{Honor Student}\label{sec:Concept:Student:Honor}
+    An honor student is any student whom is enrolled in the honor program.  Note that the honor program is only offered for the undergraduate program.  As a result,  no one student can be considered a graduate honor student for the same major.  However, these are not necessarily mutually exclusive, however very likely.  For example, a student can be a graduate student for computer science while being an honor student for music.  A student cannot be a graduate student for computer science wile also being ahonor student for computer science.  An honor student is also assumed to be active in some research activity, aw well as participating in a number of honor credits.  An honor student is given more attribute, as a result:
+    \begin{itemize}
+      \item \textit{Num\_Hours\_Complteted}: Number of honor credits botained so far.
+      \item \textit{Research}: Specific research program in which the student particpates.
+    \end{itemize}
+
+  \subsubsection{Graduate Student}\label{sec:Concept:Student:Graduate}
+    A graduate student is a special type of student who is in a completely different degree program as the rest of the students.  Pu simply, they are any student attempting to obtain a master's, PHD, or other related degree after completion of an undergraduate degree.  Usually, a graduate student must also particpate in some form of research like an honor studen mentioned in section \ref{sec:Concept:Student:Honor}.  As a result, the same attribute is given to the graduate student.
+    \begin{itemize}
+      \item \textit{Research}: Specific reasearch prgoram in which the student participates.
+    \end{itemize}
+
+  \subsection{Courses}\label{sec:Concept:Courses}
+    A course is group into three categories:
+    \begin{itemize}
+      \item Departments
+      \item Course
+      \item Section
+    \end{itemize}
+    After each level, the specific course get more and mroe detailed from the entire department type, all teh way to the specific section.  For example. there are multiple computer science courses (Department is Computer Science).  Within that department, there exists multiple coursess such as CMPSC 431W (Course is CMPSC 431W).  However, within that specific course, tehre are multiple sections.
+    \newline\newline
+    As a result, the entities are related in a linear fahion.  The following diagram shows each in detail.
+
+    \begin{figure}[H]
+    \begin{center}
+      \scalebox{0.67}{
+      \begin{tikzpicture}[node distance=2cm, every edge/.style={link}]
+        \node[entity] (sect) {Section};
+        \node[relationship] (blto) [below=of sect] {Belongs\_To};
+        \node[entity] (crse) [below=of blto] {Course};
+        \node[relationship] (prto) [below=of crse] {Part\_Of};
+        \node[entity] (dept) [below=of prto] {Department};
+
+        \node[attribute] (a1) [left=of sect] {\key{Section\_Num}};
+        \node[attribute] (a2) [above=of sect] {Capacity};
+        \node[attribute] (a3) [right=of sect] {Textbook};
+
+        \node[attribute] (b1) [left=of blto] {Administerd\_By};
+
+        \node[attribute] (c1) [right=of crse] {Course\_Name};
+        \node[attribute] (c2) [left=of crse] {\key{Course\_ID}};
+
+        \node[attribute] (d1) [left=of prto] {Adminstered\_By};
+
+        \node[attribute] (e1) [left=of dept] {\key{Department\_ID}};
+        \node[attribute] (e2) [below=of dept] {Budget};
+        \node[attribute] (e3) [right=of dept] {Department\_Name};
+
+        \draw[->] (sect) edge node {} (blto);
+        \draw[-] (blto) edge node {} (crse);
+        \draw[->] (crse) edge node {} (prto);
+        \draw[-] (prto) edge node {} (dept);
+
+        \draw[-] (a1) edge node {} (sect);
+        \draw[-] (a2) edge node {} (sect);
+        \draw[-] (a3) edge node {} (sect);
+
+        \draw[-] (b1) edge node {} (blto);
+
+        \draw[-] (c1) edge node {} (crse);
+        \draw[-] (c2) edge node {} (crse);
+
+        \draw[-] (d1) edge node {} (prto);
+
+        \draw[-] (e1) edge node {} (dept);
+        \draw[-] (e2) edge node {} (dept);
+        \draw[-] (e3) edge node {} (dept);
+
+      \end{tikzpicture}
+      }
+      \caption{ER Diagram of Courses}\label{fig:Overview ER Courses}
+    \end{center}
+    \end{figure}
+
+  \subsubsection{Section}\label{sec:Concept:Courses:Section}
+    A section represents a single section of a course.  Within the course, one can identify who is taking the course, who is teaching the course, student grades, and other aspects of the a class.  However for the this specfic section, only the relationship betweem a secction, course, and department shall be mentioned.  Withi this definithin, a course is given three aattributes:
+    \begin{itemize}
+      \item \textit{Section\_Num}: Identifier and section number of a section
+      \item \textit{Capactiy}: Capacity of the section
+      \item \textit{Textbook}: Specific textbook used for the course
+    \end{itemize}
+
+  \subsubsection{Course}\label{sec:Concept:Courses:Course}
+    A course is a specific curricuulum that a group of section should follow.  Doing so, a course represent s a class such as CMPSC 431W or more sepcifically 431W within the Computer Science department.  A course is only given identiers to identify the course as everything else should be able to be determined through the section.
+    \begin{itemize}
+      \item \textit{Course\_ID}: Unique identifer for the course
+      \item \textit{Course\_Name}: Name of the course.
+    \end{itemize}
+
+  \subsubsection{Department}\label{sec:Concept:Courses:Department}
+    A department represents a group of courses tgat maintain a major or degree program.  For example computer science, electirical engineering, chemistry and psychology are all valid departments.  A department is more administrative than the rest of the groups so it has attributes regarding budget as well as its identiers.
+    \begin{itemize}
+      \item \textit{Department\_ID}: Unique idenfier for the department
+      \item \textit{Department\_Name}: Name of the department
+      \item \textit{Budget}: Budger of the department
+    \end{itemize}
+
+  \subsection{Faculty}\label{sec:Courses:Faculty}
+    A faculty member represents any person who assists in a class.   Whether that be a teacher, teaching assistant, laboratory manager, etc.m that person is a faculy member.  Because there are so many categories for a faculty members, a faculty member is abstracted in a way very similar to the student.
+    \begin{itemize}
+      \item Instructor: Instructor of a course
+      \item Assistnat: Any teaching assistant, learning assistant, laboratory manager that supports the course
+      \item Researcher: Any person participating in research affiliated with the school
+      \item Other: Any other person who does not fit into the aforementioned categores such as an IT specialist or a janitor.
+    \end{itemize}
+
+    Note that these categroes are not necessarily mutually excliusive from each other.  For instance, more often than not, a researcher will also teach a course, making them both a researcher and am instructor.
+
+    \begin{figure}[H]
+    \begin{center}
+      \scalebox{0.67}{
+      \begin{tikzpicture}[node distance=2cm, every edge/.style={link}]
+        \node[entity] (fcty) {Faculty};
+        \node[isa] (isa1) [below=of fcty] {ISA};
+        \node[entity] (inst) [below left=of isa1] {Instructor};
+        \node[entity] (asst) [below=of isa1] {Assistant};
+        \node[entity] (othr) [below right=of isa1] {FacultyMember\_Other};
+        \node[entity] (rsch) [right=of isa1] {Researcher};
+
+        \node[attribute] (a1) [above=of fcty] {\key{fid}};
+        \node[attribute] (a2) [above=0.6 cm of a1] {name};
+        \node[attribute] (a3) [left=0.1 cm of a1] {age};
+        \node[attribute] (a4) [left=0.1 cm of a3] {gender};
+        \node[attribute] (a5) [left=0.1 cm of a4] {pemai};
+        \node[attribute] (a6) [left=0.1 cm of a2] {wemail};
+        \node[attribute] (a7) [left=0.1 cm of a6] {hstreet};
+        \node[attribute] (a8) [left=0.1 cm of a7] {hcity};
+        \node[attribute] (a9) [right=0.1 cm of a1] {hstate};
+        \node[attribute] (a10) [right=0.1 cm of a9] {wstreet};
+        \node[attribute] (a11) [right=0.1 cm of a10] {wcity};
+        \node[attribute] (a12) [right=0.1 cm of a11] {wstate};
+        \node[attribute] (a13) [right=0.1 cm of a2] {password};
+        \node[attribute] (a14) [right=0.1 cm of a13] {department};
+        \node[attribute] (a15) [right=0.1 cm of a14] {pay};
+        \node[attribute] (a16) [right=0.1 cm of a15] {semesters};
+        \node[attribute] (a17) [right=0.1 cm of a12] {title};
+
+        \draw[-] (a1) edge node {} (fcty);
+        \draw[-] (a2) edge node {} (fcty);
+        \draw[-] (a3) edge node {} (fcty);
+        \draw[-] (a4) edge node {} (fcty);
+        \draw[-] (a5) edge node {} (fcty);
+        \draw[-] (a6) edge node {} (fcty);
+        \draw[-] (a7) edge node {} (fcty);
+        \draw[-] (a8) edge node {} (fcty);
+        \draw[-] (a9) edge node {} (fcty);
+        \draw[-] (a10) edge node {} (fcty);
+        \draw[-] (a11) edge node {} (fcty);
+        \draw[-] (a12) edge node {} (fcty);
+        \draw[-] (a13) edge node {} (fcty);
+        \draw[-] (a14) edge node {} (fcty);
+        \draw[-] (a15) edge node {} (fcty);
+        \draw[-] (a16) edge node {} (fcty);
+        \draw[-] (a17) edge node {} (fcty);
+
+
+      \end{tikzpicture}
+      }
+      \caption{Overview ER diagram of Faculty members}
+    \end{center}
+  \end{figure}
+
+  \subsection{Researcher}\label{sec:Courses:Researcher}
+    A researcher is any user who actively participates in research affiliated with LionState University.  Note that we will not discard inactive researchers due to the lack of need and uncertainty of use.  A researcher usually has a team behind him/her, so they must be accounted for as well.  If that person is not affiliated with the University, however, issues may occur, so we use a weak entity relationship instead.
+    The researchers have no additional attributes, so use section \ref{sec:Courses:Faculty} as a reference.
+
+  \newpage
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   % Appendix
 
   \section{Appendix}\label{sec:Appendix}
