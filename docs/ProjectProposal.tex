@@ -80,7 +80,6 @@
       \item Conceptual database design
       \item Technological survey
       \item Logical database design
-      \item Schema Refinements
     \end{itemize}
 
   \medskip
@@ -672,6 +671,33 @@
   \newpage
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Technological Survey
+
+  \section{Technological Survey}\label{sec:Tech}
+    In this section, different options for implementing the database and web-application are mentioned and compared.
+
+    \subsection{Intended Implementation}\label{sec:Tech:intent}
+
+    \subsubsection{Angular JS}
+      Angular JS is a framework, originally developed by Google in order to build very powerful Web applications.  It is extremely useful for buling large scale web applications which need high performance, something that seems perfect for a database application.  Further it is extremely easy to maintain and hundreds of web applications already used it, meaning it is robuts and reiliable.  It utilizes JavaScript, a language that is extremely powerful for web applications, and is one of the best languages for such a task.  Further, following a client-side Model-View-Controller pattern and Model-View-Viewmodel pattern, it aims to simplify the testing and development of web applications.
+
+    \subsubsection{MYSQL Database}
+      MySQL is an open-source relational database management system, derived from SQL.  The program is written in C/C++ and is parsed by yacc in order to operate on multiple different platforms and cross-platform support.  There exists stored procedures, triggers, cursors, information schea, and many other features that any database can take advantage.
+
+    \subsection{Alternatives}\label{sec:Tech:intent}
+
+    \subsubsection{Ruby on Rails}
+      Ruby on Rails is a very useful, intuitive, and productive web application frameword written by David Hansson.  It is very easy to use and one can create database-driven web application using a Model-View-Controller (MVC) pattern very easily.  However, it is currently written in Ruby, so it is not the preffered method.  However, many websites such as Github, AirBnB use this frameworks.  If Angular JS is not suitable enoight for this application, Ruby on Rails is definitely the alternative.
+
+    \subsubsection{Django}
+      Django is one of the more robust framework intended for speed.  It was invented in order to male applications fast and reilable.  The framework is in Python, so there may be type checking errors, which is the primary reason for avoiding this framework.  Otherwise, it is very strong.  Because it is a high level framework, it takes care of a lot of the hassle usually required for web development.  As it is also extremely scalable, it is suitable for database applications.
+
+    \subsubsection{FLASK}
+      Flask is a microframework for Python and is extremely easy to use.  However, after previous attempts using this framework, there are samll quirks that are harder to deal with, which is why is should be avoided.  However, it is an extremly strong framework that is easy to implement due to a lack of versatility.  Since itdoes nore require any particular tools or libraries, it is classified as a microframework.  However, it does not have any database application layer, making it unusable for this project.
+
+    \newpage
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   % Appendix
 
   \section{Appendix}\label{sec:Appendix}
@@ -681,12 +707,42 @@
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   % References
 
-  \begin{thebibliography}{1}
+  \begin{thebibliography}{4}
 
     \bibitem{textbook}
     Ramakrishnan; Gehrke.
     \textit{Database Management Systems- Third Edition}.
     McGraw-Hill Higher Edication, 2003.
+
+    \bibitem{webpage}
+    Ronacher, Armin.
+    \textit{Flask docs Forward}.
+    http://flask.pocoo.org:80/docs/0.10/foreword
+    2013.
+
+    \bibitem{webpage}
+    Google.
+    \textit{What is AngualarJS}.
+    https://docs.angularjs.org/guide/introduction
+    2018.
+
+    \bibitem{webpage}
+    Oracle.
+    \textit{MySQL 8.0 Reference Manual}.
+    https://dev.mysql.com/doc/refman/8.0/en/
+    2019.
+
+    \bibitem{webpage}
+    Bigg, Ryan.
+    \textit{Getting Started with Rails}.
+    https://guides.rubyonrails.org/getting\_started.html
+    2018.
+
+    \bibitem{webpage}
+    Django.
+    \textit{Why Django?}
+    https://www.djangoproject.com/start/overview/
+    2019.
 
   \end{thebibliography}
 
