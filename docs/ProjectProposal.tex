@@ -697,6 +697,143 @@
 
     \newpage
 
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Logical Database Design
+
+  \section{Logical Database Design}
+    This section will discuss the conceptual database design of the CanvasPath application.
+
+  \subsection{Overview}
+    The CanvasPath application will have primarily four tables or databases:
+    \begin{itemize}
+      \item Student
+      \item Faculty Member
+      \item Course
+      \item Department
+      \item Section
+      \item ResearchAssistant
+    \end{itemize}
+    Each individual group is more specifically defined in section \ref{sec:Concept}.
+
+  \subsection{Student}
+    Based on the student attributes mentioned in \ref{sec:Concept:Students}, it is apprpriate to combinee all the abstracted student types and instead define a type attribute to conglomerate all the categories.  The primary key will be the student id and the foreign key will be the section ID.  Since sections are not deleted when a student is deleted, no action is taken on delete.
+
+    \begin{lstlisting}
+      CREATE TABLE STUDENT
+        sid           INT NOT NULL,
+        type          INT NOT NULL,
+        name          VARCHAR[50] NOT NULL,
+        age           INT,
+        email         VARCHRA[50],
+        street        VARCHAR[50],
+        city          VARCHAR[50],
+        state         VARCHAR[2],
+        major         VARCHAR[40],
+        inactive_date INT,
+        institution   VARCHAR[100],
+        type_student  VARCHAR[30],
+        honor_credit  INT,
+        GPA           REAL,
+        password      INT,
+        Research      VARCHAR[100]
+        sectid        INT,
+        PRIMARY KEY (sid),
+        FOREIGN KEY (sectid) REFERENCES FACULTY,
+        ON DELETE NO ACTION
+        );
+    \end{lstlisting}
+
+  \subsection{Faculty Member}
+    Based on the faculty attributes mentioned in \ref{sec:Concept:Faculty}, it is also appropriate to combine all the abstracted faculty types into one table.  However the researcher serves as a special case because a weak entity relies on it.  Alike thes student if a faculty member is removed, a course is not removed.
+
+    \begin{lstlisting}
+      CREATE TABLE FACULTY(
+        fid           INT NOT NULL,
+        type          INT NOT NULL,
+        name          VARCHAR[50] NOT NULL,
+        age           INT,
+        pemail        VARCHRA[50],
+        pstreet       VARCHAR[50],
+        pcity         VARCHAR[50],
+        pstate        VARCHAR[2],
+        wemail        VARCHRA[50],
+        wstreet       VARCHAR[50],
+        wcity         VARCHAR[50],
+        wstate        VARCHAR[2],
+        dept          VARCHAR[40],
+        rating        REAL,
+        password      INT,
+        payment       VARCHAR[100]
+        sectid        INT,
+        PRIMARY KEY (fid),
+        FOREIGN KEY (sectid) REFERENCES STUDENT,
+        ON DELETE NO ACTION
+        );
+    \end{lstlisting}
+
+  \subsection{Section, Courses, and Departments}
+    The section represent courses and should store everything related to that course.  Following the attributes in \ref{sec:Concept:Courses:Section}, the section should connect students with faculty members.  The primary key is the course ID and foreign keys are both the faculty id ad student id.
+
+    \begin{lstlisting}
+      CREATE TABLE SECTION(
+        cid           INT NOT NULL,
+        sid           INT NOT NULL,
+        fid           INT NOT NULL,
+        capactiy      INT,
+        sec_name      INT NOT NULL,
+        textbook      VARCHAR[200],
+        administrator VARCHAR[200],
+        course_id     INT NOT NULL,
+        PRIMARY KEY (cid),
+        FOREIGN KEY (sid) REFERENCE STUDENT,
+        FOREIGN KEY (cid) REFERENCE FACULTY,
+        FOREIGN KEY (course_id) REFERENCE COURSE
+        ON DELETE NO ACTION
+        );
+    \end{lstlisting}
+
+    The same can be done for the course:
+
+    \begin{lstlisting}
+      CREATE TABLE COURSE(
+        course_id     INT NOT NULL,
+        course_name   VARCHAR[50] NOT NULL,
+        administrator VARCHAR[200],
+        dept_id       INT NOT NULL,
+        PRIMARY KEY (course_id),
+        FOREIGN KEY (dept_id) REFERENCE DEPARTMENT,
+        ON DELETE NO ACTION
+        );
+    \end{lstlisting}
+
+    And finally for the department:
+
+    \begin{lstlisting}
+      CREATE TABLE DEPARTMENT(
+        dept_id       INT NOT NULL,
+        dept_name     VARCHAR[50] NOT NULL,
+        administrator VARCHAR[200],
+        budgets       REAL,
+        PRIMARY KEY (dept_id),
+        ON DELETE CASCADE
+        );
+    \end{lstlisting}
+
+    \subsection{Reaearch Assistant}
+      Since the research assistant is a weak entity, the following table must be issued:
+
+      \begin{lstlisting}
+        CREATE TABLE RESEARCH_ASSISTANT(
+          rid     INT NOT NULL,
+          fid   INT NOT NULL,
+          dept_id     INT NOT NULL,
+          PRIMARY KEY (rid_id),
+          FOREIGN KEY (fid) REFERENCE FACULTY,
+          ON DELETE NO ACTION
+          );
+      \end{lstlisting}
+  \newpage
+
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   % Appendix
 
