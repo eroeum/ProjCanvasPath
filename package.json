@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/eroeum/ProjCanvasPath/issues"
   },
-  "homepage": "https://github.com/eroeum/ProjCanvasPath#readme"
+  "homepage": "https://github.com/eroeum/ProjCanvasPath#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
 }
