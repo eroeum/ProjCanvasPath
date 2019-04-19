@@ -1,0 +1,22 @@
+{
+  "name": "projcanvaspath",
+  "version": "1.0.0",
+  "description": "Project for CMPSC 431W",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eroeum/ProjCanvasPath.git"
+  },
+  "author": "Eric Roeum",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eroeum/ProjCanvasPath/issues"
+  },
+  "homepage": "https://github.com/eroeum/ProjCanvasPath#readme"
+}
