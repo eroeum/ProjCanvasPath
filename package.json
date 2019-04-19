@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/eroeum/ProjCanvasPath#readme",
   "dependencies": {
+    "connect-mongo": "^2.0.3",
     "cookie-parser": "^1.4.4",
     "express": "^4.16.4",
     "express-session": "^1.16.1"
