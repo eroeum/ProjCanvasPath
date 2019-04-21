@@ -1,4 +1,8 @@
 var AM = require('./modules/account-manager');
+var ML = require('./modules/major-list');
+var AL = require('./modules/age-list');
+var GL = require('./modules/gender-list');
+var SL = require('./modules/state-list');
 
 module.exports = function(app) {
 
@@ -42,4 +46,30 @@ module.exports = function(app) {
         res.clearCookie('login');
         req.session.destroy(function(e){ res.status(200).send('ok'); });
     })
+
+    app.get('/signup', function(req, res) {
+        res.render('signup', {  title: 'Signup', majors: ML, ages: AL, genders: GL, states: SL});
+    });
+
+    app.post('/signup', function(req, res){
+        AM.addNewAccount({
+        name 	: req.body['name'],
+        email 	: req.body['email'],
+        user 	: req.body['user'],
+        pass	: req.body['pass'],
+        major   : req.body['major'],
+        age     : req.body['age'],
+        street  : req.body['street'],
+        city    : req.body['city'],
+        zipcode : req.body['zipcode'],
+        state   : req.body['state'],
+        gender  : req.body['gender']
+        }, function(e){
+            if (e){
+                res.status(400).send(e);
+            }	else{
+                res.status(200).send('ok');
+            }
+        });
+    });
 };
