@@ -1,0 +1,87 @@
+
+// preset form values if we receive a userdata object //
+- user = typeof(udata) != 'undefined' ? udata : { }
+// store the userId on the client side in a hidden input field //
+input(type='hidden', value= user._id)#userId
+
+#account-form-container.center-vertical
+	form.card.card-body.bg-light(method='post')#account-form
+		h2
+		h6#sub Please tell us a little about yourself.
+		hr
+		.form-group.row
+			label.col-sm-3.col-form-label.col-form-label-sm Name
+			.col-sm-9
+				input.form-control#name-tf(type='text', name='name', value= user.name)
+
+		.form-group.row
+			label.col-sm-3.col-form-label.col-form-label-sm Email
+			.col-sm-9
+				input.form-control#email-tf(type='email', name='email', value= user.email)
+
+		.form-group.row.margin-zero
+			label.col-sm-3.col-form-label.col-form-label-sm Major
+			.col-sm-9
+				select.custom-select#major-list(name='major')
+					each item in majors
+						option(selected=item.name == user.major)= item.name
+
+		hr
+
+		.form-group.row
+			label.col-sm-3.col-form-label.col-form-label-sm Street
+			.col-sm-9
+				input.form-control#street-tf(type='text', name='street', value= user.street)
+
+		.form-group.row
+			label.col-sm-3.col-form-label.col-form-label-sm City
+			.col-sm-9
+				input.form-control#city-tf(type='text', name='City', value= user.city)
+
+		.form-group.row
+			label.col-sm-3.col-form-label.col-form-label-sm Zipcode
+			.col-sm-9
+				input.form-control#zipcode-tf(type='text', name='zipcode', value= user.zipcode)
+
+		.form-group.row.margin-zero
+			label.col-sm-3.col-form-label.col-form-label-sm State
+			.col-sm-9
+				select.custom-select#age-list(name='state')
+					each item in states
+						option(selected=item.name == user.state)= item.name
+
+		hr
+
+		.form-group.row.margin-zero
+			label.col-sm-3.col-form-label.col-form-label-sm Age
+			.col-sm-9
+				select.custom-select#age-list(name='age')
+					each item in ages
+						option(selected=item.name == user.age)= item.name
+
+		hr
+
+		.form-group.row.margin-zero
+			label.col-sm-3.col-form-label.col-form-label-sm Gender
+			.col-sm-9
+				select.custom-select#age-list(name='gender')
+					each item in genders
+						option(selected=item.name == user.gender)= item.name
+
+		hr
+		.form-group.row
+			label.col-sm-3.col-form-label.col-form-label-sm Username
+			.col-sm-9
+				input.form-control#user-tf(type='text', name='user', value= user.user).disabled
+
+		.form-group.row.margin-zero
+			label.col-sm-3.col-form-label.col-form-label-sm Password
+			.col-sm-9
+				input.form-control#pass-tf(type='password', name='pass', value='')
+
+		hr
+		.form-buttons
+			button(type='button')#account-form-btn1.btn.btn-outline-dark
+			button(type='submit')#account-form-btn2.btn.btn-primary
+
+include modals/form-errors
