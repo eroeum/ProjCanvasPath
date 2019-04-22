@@ -3,6 +3,7 @@ var ML = require('./modules/major-list');
 var AL = require('./modules/age-list');
 var GL = require('./modules/gender-list');
 var SL = require('./modules/state-list');
+var EM = require('./modules/email-dispatcher');
 
 module.exports = function(app) {
 
@@ -72,4 +73,48 @@ module.exports = function(app) {
             }
         });
     });
+
+    app.post('/lost-password', function(req, res){
+		let email = req.body['email'];
+		AM.generatePasswordKey(email, req.ip, function(e, account){
+			if (e){
+				res.status(400).send(e);
+			}	else{
+				EM.dispatchResetPasswordLink(account, function(e, m){
+			// TODO this callback takes a moment to return, add a loader to give user feedback //
+					if (!e){
+						res.status(200).send('ok');
+					}	else{
+						for (k in e) console.log('ERROR : ', k, e[k]);
+						res.status(400).send('unable to dispatch password reset');
+					}
+				});
+			}
+		});
+	});
+
+	app.get('/reset-password', function(req, res) {
+		AM.validatePasswordKey(req.query['key'], req.ip, function(e, o){
+			if (e || o == null){
+				res.redirect('/');
+			} else{
+				req.session.passKey = req.query['key'];
+				res.render('reset', { title : 'Reset Password' });
+			}
+		})
+	});
+
+	app.post('/reset-password', function(req, res) {
+		let newPass = req.body['pass'];
+		let passKey = req.session.passKey;
+	// destory the session immediately after retrieving the stored passkey //
+		req.session.destroy();
+		AM.updatePassword(passKey, newPass, function(e, o){
+			if (o){
+				res.status(200).send('ok');
+			}	else{
+				res.status(400).send('unable to update password');
+			}
+		})
+	});
 };
